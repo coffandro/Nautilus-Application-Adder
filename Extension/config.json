@@ -1,0 +1,6 @@
+{
+  "items": {
+    "_comment": "Items to include in the context menu",
+    "AddToLocal": true,
+  }
+}
