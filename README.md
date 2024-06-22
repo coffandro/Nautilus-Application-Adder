@@ -2,10 +2,15 @@
 This simply adds a little context menu entry which allows you to add a binary or script to your applications list!
 
 ## To install!
+run these commands with nautilus closed
 ```Bash
 git clone https://github.com/coffandro/Nautilus-Application-Adder.git
 cd Nautilus-Application-Adder
 ./install.sh -i
+```Bash
+or as a self cleaning one liner:
+```
+git clone https://github.com/coffandro/Nautilus-Application-Adder.git && cd Nautilus-Application-Adder && ./install.sh -i && cd ~ && rm -r Nautilus-Application-Adder
 ```
 
 ## To configure!
