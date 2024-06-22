@@ -5,7 +5,7 @@ This simply adds a little context menu entry which allows you to add a binary or
 ```Bash
 git clone https://github.com/coffandro/Nautilus-Application-Adder.git
 cd Nautilus-Application-Adder
-./install.sh -ic
+./install.sh -i
 ```
 
 ## To configure!
