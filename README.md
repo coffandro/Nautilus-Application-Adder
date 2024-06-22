@@ -7,9 +7,9 @@ run these commands with nautilus closed
 git clone https://github.com/coffandro/Nautilus-Application-Adder.git
 cd Nautilus-Application-Adder
 ./install.sh -i
-```Bash
-or as a self cleaning one liner:
 ```
+or as a self cleaning one liner:
+```Bash
 git clone https://github.com/coffandro/Nautilus-Application-Adder.git && cd Nautilus-Application-Adder && ./install.sh -i && cd ~ && rm -r Nautilus-Application-Adder
 ```
 
