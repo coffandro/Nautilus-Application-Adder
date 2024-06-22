@@ -38,12 +38,7 @@ rm -r ~/.local/share/nautilus-python/extensions/NautilusApplications
 rm ~/.local/share/nautilus-python/extensions/NautliusApplications-runner.py
 }
 
-clean() {
-Directory=${PWD}
-rm -r $Directory
-}
-
-VALID_ARGS=$(getopt -o hirc --long help,install,remove,clean -- "$@")
+VALID_ARGS=$(getopt -o hir --long help,install,remove -- "$@")
 if [[ $? -ne 0 ]]; then
     exit 1;
 fi
@@ -61,10 +56,6 @@ while [ : ]; do
         ;;
     -r | --remove)
         remove
-        shift
-        ;;
-    -c | --clean)
-        clean
         shift
         ;;
     --) shift;
