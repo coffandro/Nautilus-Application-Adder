@@ -1,6 +1,7 @@
 from gi.repository import Nautilus, GObject, Gtk, GdkPixbuf
 from typing import List
 from pathlib import Path
+from builtins import any as b_any
 import os
 
 
@@ -98,7 +99,24 @@ class MyWindow(Gtk.Window):
         CMDPicker.connect("clicked", self.SelectCMD)
 
         self.IconButton = Gtk.Button()
-        if File.get_mime_type() == None:
+
+        Path = str(File.get_uri())
+        Path = Path.split("file://")[1]
+        word = os.path.basename(Path)
+        Path = os.path.dirname(Path)
+
+        images = []
+        for image in os.listdir(Path):
+            # check if the image ends with png or jpg or jpeg
+            if (image.endswith(".png") or image.endswith(".jpg")\
+                or image.endswith(".jpeg")):
+                images.append(image)
+
+        if b_any(word in x for x in images):
+            Icon = self.CreateIcon(
+                Path + "/" + images[0]
+            )
+        elif File.get_mime_type() == None:
             Icon = self.CreateIcon(
                 "/usr/share/icons/Adwaita/symbolic/actions/action-unavailable-symbolic.svg"
             )
@@ -132,6 +150,10 @@ class MyWindow(Gtk.Window):
         grid = Gtk.Grid()
         grid.set_column_spacing(5)
         grid.set_row_spacing(5)
+        grid.set_margin_top(10)
+        grid.set_margin_bottom(10)
+        grid.set_margin_start(10)
+        grid.set_margin_end(10)
 
         grid.attach(self.IconButton, 0, 0, 1, 4)
 
