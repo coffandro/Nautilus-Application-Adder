@@ -3,6 +3,7 @@ from typing import List
 from pathlib import Path
 import os
 
+
 class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
     def __init__(self):
         super().__init__()
@@ -65,11 +66,12 @@ class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
                 active_items.append(item)
 
             return active_items
-            
+
+
 class MyWindow(Gtk.Window):
     def __init__(self, File=None, path="/usr/share/application", **kargs):
         super().__init__(**kargs, title="App list adder")
-        
+
         self.path = path
         self.file = File
         self.IconPath = ""
@@ -97,16 +99,26 @@ class MyWindow(Gtk.Window):
 
         self.IconButton = Gtk.Button()
         if File.get_mime_type() == None:
-            Icon = self.CreateIcon("/usr/share/icons/Adwaita/symbolic/actions/action-unavailable-symbolic.svg")
+            Icon = self.CreateIcon(
+                "/usr/share/icons/Adwaita/symbolic/actions/action-unavailable-symbolic.svg"
+            )
         elif File.get_mime_type() == "application/x-executable":
-            Icon = self.CreateIcon("/usr/share/icons/Adwaita/symbolic/mimetypes/application-x-executable-symbolic.svg")
+            Icon = self.CreateIcon(
+                "/usr/share/icons/Adwaita/symbolic/mimetypes/application-x-executable-symbolic.svg"
+            )
         elif File.get_mime_type() == "application/x-sh":
-            Icon = self.CreateIcon("/usr/share/icons/Adwaita/symbolic/mimetypes/text-x-generic-symbolic.svg")
+            Icon = self.CreateIcon(
+                "/usr/share/icons/Adwaita/symbolic/mimetypes/text-x-generic-symbolic.svg"
+            )
         elif File.get_mime_type() == "application/x-shellscript":
-            Icon = self.CreateIcon("/usr/share/icons/Adwaita/symbolic/mimetypes/text-x-generic-symbolic.svg")
+            Icon = self.CreateIcon(
+                "/usr/share/icons/Adwaita/symbolic/mimetypes/text-x-generic-symbolic.svg"
+            )
         else:
-            Icon = self.CreateIcon("/usr/share/icons/Adwaita/symbolic/mimetypes/application-x-executable-symbolic.svg")
-        
+            Icon = self.CreateIcon(
+                "/usr/share/icons/Adwaita/symbolic/mimetypes/application-x-executable-symbolic.svg"
+            )
+
         self.IconButton.set_child(Icon)
         self.IconButton.connect("clicked", self.SelectImage)
 
@@ -132,60 +144,64 @@ class MyWindow(Gtk.Window):
         grid.attach(CMDLabel, 1, 3, 1, 1)
         grid.attach(self.CMDTextbox, 2, 3, 1, 1)
         grid.attach(CMDPicker, 3, 3, 1, 1)
-        
+
         grid.attach(self.TerminalCheckbox, 2, 4, 2, 1)
 
         grid.attach(CancelButton, 0, 5, 2, 1)
         grid.attach(SubmitButton, 2, 5, 2, 1)
 
         self.set_child(grid)
-    
+
     def CreateIcon(self, path):
         Icon = Gtk.Image()
-        
+
         width = -1
         height = 128
         preserve_aspect_ratio = True
-        
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(path, width, height, preserve_aspect_ratio)
-        
+
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
+            path, width, height, preserve_aspect_ratio
+        )
+
         Icon.set_from_pixbuf(pixbuf)
         Icon.set_pixel_size(96)
-        
+
         self.IconPath = path
         return Icon
-        
+
     def SelectImage(self, _widget):
         dialog = Gtk.FileDialog()
-        
+
         dialog.open(self, None, self.on_Icon_select)
-    
+
     def SelectCMD(self, _widget):
         dialog = Gtk.FileDialog()
-        
+
         dialog.open(self, None, self.on_CMD_select)
 
-    def on_Icon_select(self,dialog, result):
+    def on_Icon_select(self, dialog, result):
         try:
             File = dialog.open_finish(result)
             self.IconButton.set_child(self.CreateIcon(File.get_path()))
         except Gtk.DialogError:
             # user cancelled or backend error
             pass
-    
-    def on_CMD_select(self,dialog, result):
+
+    def on_CMD_select(self, dialog, result):
         try:
             File = dialog.open_finish(result)
             self.CMDTextbox.set_text(File.get_path())
         except Gtk.DialogError:
             # user cancelled or backend error
             pass
-        
+
     def Submit(self, _widget):
         if not os.path.isdir(self.path):
             os.mkdir(self.path)
-        
-        f = open(f"{self.path}/{self.NameTextbox.get_text().split('.')[0]}.desktop", "w")
+
+        f = open(
+            f"{self.path}/{self.NameTextbox.get_text().split('.')[0]}.desktop", "w"
+        )
         f.write("[Desktop Entry]\n")
         f.write(f"Name={self.NameTextbox.get_text()}\n")
         f.write(f"Icon={self.IconPath}\n")
@@ -195,7 +211,6 @@ class MyWindow(Gtk.Window):
         f.write(f"Comment={self.CmntTextbox.get_text()}\n")
         f.write(f"Exec={self.CMDTextbox.get_text()}\n")
         f.close()
-        
 
     def Close(self, _widget):
         self.destroy()
