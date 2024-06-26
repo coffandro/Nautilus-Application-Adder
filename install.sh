@@ -17,6 +17,7 @@ install() {
 InstallDeps
 mkdir -p ~/.local/share/nautilus-python/extensions/NautilusApplications
 cp Extension/NautilusApplications.py ~/.local/share/nautilus-python/extensions/NautilusApplications
+cp Extension/window.py ~/.local/share/nautilus-python/extensions/NautilusApplications
 cp Extension/NautliusApplications-runner.py ~/.local/share/nautilus-python/extensions
 
 ConfigFile="$HOME/.local/share/nautilus-python/extensions/NautilusApplications/config.json"
