@@ -11,8 +11,8 @@ class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
         super().__init__()
 
         self.MimeTypes = [
-            "application/x-ms-dos-executable",
-            "application/x-ms-installer",
+            "application/x-msdownload",
+            "application/vnd.microsoft.portable-executable",
             "application/x-sh",
             "application/x-shellscript",
             "application/x-executable",
@@ -56,6 +56,7 @@ class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
             return []
 
         file = files[0]
+        print(file.get_mime_type())
         if file.get_mime_type() in self.MimeTypes:
 
             if config_items["AddToLocal"]:

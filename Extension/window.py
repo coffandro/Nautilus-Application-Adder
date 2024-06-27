@@ -1,7 +1,9 @@
 from gi.repository import Nautilus, GObject, Gtk, GdkPixbuf
 from pathlib import Path
+import subprocess
 from builtins import any as b_any
 import os
+
 
 class NAAWindow(Gtk.Window):
     def __init__(self, File=None, path="/usr/share/application", **kargs):
@@ -11,18 +13,20 @@ class NAAWindow(Gtk.Window):
         self.set_titlebar(hb)
 
         hb.set_show_title_buttons(False)
-
         CancelButton = Gtk.Button.new_with_label("Cancel")
         CancelButton.connect("clicked", self.Close)
         SubmitButton = Gtk.Button.new_with_label("Submit")
         SubmitButton.connect("clicked", self.Submit)
-
         hb.pack_start(CancelButton)
         hb.pack_end(SubmitButton)
 
         self.path = path
         self.file = File
         self.IconPath = ""
+        self.WinTypes = {
+            "application/x-msdownload",
+            "application/vnd.microsoft.portable-executable",
+        }
 
         NameLabel = Gtk.Label.new("Name: ")
         self.NameTextbox = Gtk.Entry.new()
@@ -40,7 +44,6 @@ class NAAWindow(Gtk.Window):
 
         CMDLabel = Gtk.Label.new("Command: ")
         self.CMDTextbox = Gtk.Entry.new()
-        self.CMDTextbox.set_text(File.get_location().get_path())
 
         CMDPicker = Gtk.Button(label="🖿")
         CMDPicker.connect("clicked", self.SelectCMD)
@@ -114,6 +117,39 @@ class NAAWindow(Gtk.Window):
 
         self.set_child(grid)
 
+        if File.get_mime_type() in self.WinTypes:
+            if self.IsWine():
+                self.CmntTextbox.set_text("Windows application with Wine")
+                self.CMDTextbox.set_text("wine " + File.get_location().get_path())
+                self.TerminalCheckbox.set_active(True)
+            else:
+                self.dialog = Gtk.AlertDialog()
+                self.dialog.set_message("Error")
+                self.dialog.set_detail(
+                    "wine is not installed or not in path, do you wish to proceed?"
+                )
+                self.dialog.set_modal(True)
+                self.dialog.set_buttons(["Cancel", "Open guide", "OK"])
+                self.dialog.choose(self, None, self.CloseWineDialog)
+        elif File.get_mime_type() == "text/x-python":
+            PV = self.IsPython()
+
+            if PV != False:
+                self.CmntTextbox.set_text("Python script with " + PV)
+                self.CMDTextbox.set_text(PV + " " + File.get_location().get_path())
+                self.TerminalCheckbox.set_active(True)
+            else:
+                self.dialog = Gtk.AlertDialog()
+                self.dialog.set_message("Error")
+                self.dialog.set_detail(
+                    "python or python3 is not installed or not in path, do you wish to proceed?"
+                )
+                self.dialog.set_modal(True)
+                self.dialog.set_buttons(["Cancel", "Open guide", "OK"])
+                self.dialog.choose(self, None, self.ClosePythonDialog)
+        else:
+            self.CMDTextbox.set_text(File.get_location().get_path())
+
     def CreateIcon(self, path):
         Icon = Gtk.Image()
 
@@ -157,6 +193,40 @@ class NAAWindow(Gtk.Window):
             # user cancelled or backend error
             pass
 
+    def IsWine(self):
+        rc = subprocess.call(["which", "wine"])
+        if rc == 0:
+            print("wine installed!")
+            return True
+        else:
+            print("wine missing in path!")
+            return False
+
+    def IsPython(self):
+        rc1 = subprocess.call(["which", "python"])
+        if rc1 == 0:
+            print("python installed!")
+            Python = True
+        else:
+            print("python missing in path!")
+            Python = False
+        rc2 = subprocess.call(["which", "python3"])
+        if rc2 == 0:
+            print("python3 installed!")
+            Python3 = True
+        else:
+            print("python3 missing in path!")
+            Python3 = False
+
+        if Python3 and Python:
+            return "python"
+        elif Python3:
+            return "python3"
+        elif Python:
+            return "python"
+        else:
+            return False
+
     def Submit(self, _widget):
         if not os.path.isdir(self.path):
             os.mkdir(self.path)
@@ -177,3 +247,23 @@ class NAAWindow(Gtk.Window):
 
     def Close(self, _widget):
         self.destroy()
+
+    def CloseWineDialog(self, source_obj, async_res):
+        result = source_obj.choose_finish(async_res)
+        if result == 0:
+            self.destroy()
+        elif result == 1:
+            import webbrowser
+
+            webbrowser.open("https://wiki.winehq.org/Download")
+            self.dialog.choose(self, None, self.CloseDialog)
+
+    def CloseWineDialog(self, source_obj, async_res):
+        result = source_obj.choose_finish(async_res)
+        if result == 0:
+            self.destroy()
+        elif result == 1:
+            import webbrowser
+
+            webbrowser.open("https://www.python.org/downloads/")
+            self.dialog.choose(self, None, self.CloseDialog)
