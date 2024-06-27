@@ -258,7 +258,7 @@ class NAAWindow(Gtk.Window):
             webbrowser.open("https://wiki.winehq.org/Download")
             self.dialog.choose(self, None, self.CloseDialog)
 
-    def CloseWineDialog(self, source_obj, async_res):
+    def ClosePythonDialog(self, source_obj, async_res):
         result = source_obj.choose_finish(async_res)
         if result == 0:
             self.destroy()
