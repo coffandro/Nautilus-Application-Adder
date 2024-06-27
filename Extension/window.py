@@ -238,7 +238,7 @@ class NAAWindow(Gtk.Window):
         f.write(f"Name={self.NameTextbox.get_text()}\n")
         f.write(f"Icon={self.IconPath}\n")
         f.write("Type=Application\n")
-        f.write(f"Terminal={self.TerminalCheckbox.get_active()}\n")
+        f.write(f"Terminal={str(self.TerminalCheckbox.get_active()).lower()}\n")
         f.write(f"Comment={self.CmntTextbox.get_text()}\n")
         f.write(f"Exec={self.CMDTextbox.get_text()}\n")
         f.close()
