@@ -1,6 +1,8 @@
 # The Nautilus Application list Adder!
 This simply adds a little context menu entry which allows you to add a binary or script to your applications list!
 
+![Pico 8 Example](Examples/Pico8Example.png)
+
 ## To install!
 run these commands with nautilus closed
 ```Bash
@@ -10,7 +12,7 @@ cd Nautilus-Application-Adder
 ```
 or as a self cleaning one liner:
 ```Bash
-git clone https://github.com/coffandro/Nautilus-Application-Adder.git && cd Nautilus-Application-Adder && ./install.sh -i && cd ~ && rm -r Nautilus-Application-Adder
+git clone https://github.com/coffandro/Nautilus-Application-Adder.git && cd Nautilus-Application-Adder && ./install.sh -i && cd .. && rm -r Nautilus-Application-Adder
 ```
 
 ## To configure!
