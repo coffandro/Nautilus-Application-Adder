@@ -2,7 +2,7 @@
 This simply adds a little context menu entry which allows you to add a binary or script to your applications list!
 
 ![Pico 8 Example](Examples/Pico8Example.png)
-<sup>Example with Pico 8</sub>
+Example with Pico 8
 
 ## To install!
 run these commands with nautilus closed
