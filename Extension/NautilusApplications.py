@@ -27,6 +27,7 @@ class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
                     "items": {
                         "_comment": "Items to include in the context menu",
                         "AddToLocal": True,
+                        "RemoveFromLocal": True,
                     }
                 }
 
@@ -40,10 +41,32 @@ class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
         home = str(Path.home())
         self.Popup(file, f"{home}/.local/share/applications")
 
+    def RemoveLocalApp(
+        self,
+        menu: Nautilus.MenuItem,
+        file: Nautilus.FileInfo,
+    ) -> None:
+        home = str(Path.home())
+        os.remove(self.ApplicationExists(file))
+
     def Popup(self, file, ExportDir):
         win = window.NAAWindow(file, ExportDir)
 
         win.present()
+
+    def ApplicationExists(self, file):
+        home = str(Path.home())
+        status = False
+
+        for i in os.listdir(f"{home}/.local/share/applications"):
+            f = open(
+                f"{home}/.local/share/applications/{i}", "r"
+            )
+            if f"# NAA={file.get_location().get_path()}" in f.readline().strip('\n'):
+                status = f"{home}/.local/share/applications/{i}"
+
+            f.close()
+        return status
 
     def get_file_items(
         self,
@@ -67,5 +90,14 @@ class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
                 )
                 item.connect("activate", self.AddLocalApp, file)
                 active_items.append(item)
+            if config_items["RemoveFromLocal"]:
+                if self.ApplicationExists(file)!=False:
+                    item = Nautilus.MenuItem(
+                        name="SimpleMenuExtension::AddLocalAppEntry",
+                        label="Remove from apps",
+                        tip="This removes the selected app from your users applications list,\n others cannot see it",
+                    )
+                    item.connect("activate", self.RemoveLocalApp, file)
+                    active_items.append(item)
 
             return active_items

@@ -30,17 +30,17 @@ class NAAWindow(Gtk.Window):
 
         NameLabel = Gtk.Label.new("Name: ")
         self.NameTextbox = Gtk.Entry.new()
-        if File != None:
-            self.NameTextbox.set_text(File.get_name())
+        if self.file != None:
+            self.NameTextbox.set_text(self.file.get_name())
 
         CmntLabel = Gtk.Label.new("Comment: ")
         self.CmntTextbox = Gtk.Entry.new()
-        if File.get_mime_type() == "application/x-executable":
-            self.CmntTextbox.set_text(f"{File.get_name()} Executable")
-        elif File.get_mime_type() == "application/x-sh":
-            self.CmntTextbox.set_text(f"{File.get_name()} Script")
-        elif File.get_mime_type() == "application/x-shellscript":
-            self.CmntTextbox.set_text(f"{File.get_name()} Script")
+        if self.file.get_mime_type() == "application/x-executable":
+            self.CmntTextbox.set_text(f"{self.file.get_name()} Executable")
+        elif self.file.get_mime_type() == "application/x-sh":
+            self.CmntTextbox.set_text(f"{self.file.get_name()} Script")
+        elif self.file.get_mime_type() == "application/x-shellscript":
+            self.CmntTextbox.set_text(f"{self.file.get_name()} Script")
 
         CMDLabel = Gtk.Label.new("Command: ")
         self.CMDTextbox = Gtk.Entry.new()
@@ -50,7 +50,7 @@ class NAAWindow(Gtk.Window):
 
         self.IconButton = Gtk.Button()
 
-        Path = str(File.get_uri())
+        Path = str(self.file.get_uri())
         Path = Path.split("file://")[1]
         word = os.path.basename(Path)
         Path = os.path.dirname(Path)
@@ -67,19 +67,19 @@ class NAAWindow(Gtk.Window):
 
         if b_any(word in x for x in images):
             Icon = self.CreateIcon(Path + "/" + images[0])
-        elif File.get_mime_type() == None:
+        elif self.file.get_mime_type() == None:
             Icon = self.CreateIcon(
                 "/usr/share/icons/Adwaita/symbolic/actions/action-unavailable-symbolic.svg"
             )
-        elif File.get_mime_type() == "application/x-executable":
+        elif self.file.get_mime_type() == "application/x-executable":
             Icon = self.CreateIcon(
                 "/usr/share/icons/Adwaita/symbolic/mimetypes/application-x-executable-symbolic.svg"
             )
-        elif File.get_mime_type() == "application/x-sh":
+        elif self.file.get_mime_type() == "application/x-sh":
             Icon = self.CreateIcon(
                 "/usr/share/icons/Adwaita/symbolic/mimetypes/text-x-generic-symbolic.svg"
             )
-        elif File.get_mime_type() == "application/x-shellscript":
+        elif self.file.get_mime_type() == "application/x-shellscript":
             Icon = self.CreateIcon(
                 "/usr/share/icons/Adwaita/symbolic/mimetypes/text-x-generic-symbolic.svg"
             )
@@ -117,10 +117,10 @@ class NAAWindow(Gtk.Window):
 
         self.set_child(grid)
 
-        if File.get_mime_type() in self.WinTypes:
+        if self.file.get_mime_type() in self.WinTypes:
             if self.IsWine():
                 self.CmntTextbox.set_text("Windows application with Wine")
-                self.CMDTextbox.set_text("wine " + File.get_location().get_path())
+                self.CMDTextbox.set_text("wine " + self.file.get_location().get_path())
                 self.TerminalCheckbox.set_active(True)
             else:
                 self.dialog = Gtk.AlertDialog()
@@ -131,12 +131,12 @@ class NAAWindow(Gtk.Window):
                 self.dialog.set_modal(True)
                 self.dialog.set_buttons(["Cancel", "Open guide", "OK"])
                 self.dialog.choose(self, None, self.CloseWineDialog)
-        elif File.get_mime_type() == "text/x-python":
+        elif self.file.get_mime_type() == "text/x-python":
             PV = self.IsPython()
 
             if PV != False:
                 self.CmntTextbox.set_text("Python script with " + PV)
-                self.CMDTextbox.set_text(PV + " " + File.get_location().get_path())
+                self.CMDTextbox.set_text(PV + " " + self.file.get_location().get_path())
                 self.TerminalCheckbox.set_active(True)
             else:
                 self.dialog = Gtk.AlertDialog()
@@ -148,7 +148,7 @@ class NAAWindow(Gtk.Window):
                 self.dialog.set_buttons(["Cancel", "Open guide", "OK"])
                 self.dialog.choose(self, None, self.ClosePythonDialog)
         else:
-            self.CMDTextbox.set_text(File.get_location().get_path())
+            self.CMDTextbox.set_text(self.file.get_location().get_path())
 
     def CreateIcon(self, path):
         Icon = Gtk.Image()
@@ -168,27 +168,27 @@ class NAAWindow(Gtk.Window):
         return Icon
 
     def SelectImage(self, _widget):
-        dialog = Gtk.FileDialog()
+        dialog = Gtk.self.fileDialog()
 
         dialog.open(self, None, self.on_Icon_select)
 
     def SelectCMD(self, _widget):
-        dialog = Gtk.FileDialog()
+        dialog = Gtk.self.fileDialog()
 
         dialog.open(self, None, self.on_CMD_select)
 
     def on_Icon_select(self, dialog, result):
         try:
-            File = dialog.open_finish(result)
-            self.IconButton.set_child(self.CreateIcon(File.get_path()))
+            self.file = dialog.open_finish(result)
+            self.IconButton.set_child(self.CreateIcon(self.file.get_path()))
         except Gtk.DialogError:
             # user cancelled or backend error
             pass
 
     def on_CMD_select(self, dialog, result):
         try:
-            File = dialog.open_finish(result)
-            self.CMDTextbox.set_text(File.get_path())
+            self.file = dialog.open_finish(result)
+            self.CMDTextbox.set_text(self.file.get_path())
         except Gtk.DialogError:
             # user cancelled or backend error
             pass
@@ -234,6 +234,7 @@ class NAAWindow(Gtk.Window):
         f = open(
             f"{self.path}/{self.NameTextbox.get_text().split('.')[0]}.desktop", "w"
         )
+        f.write(f"# NAA={self.file.get_location().get_path()}\n")
         f.write("[Desktop Entry]\n")
         f.write(f"Name={self.NameTextbox.get_text()}\n")
         f.write(f"Icon={self.IconPath}\n")
