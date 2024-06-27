@@ -30,7 +30,7 @@ touch $ConfigFile
 echo '{' >> $ConfigFile
 echo '    "items": {' >> $ConfigFile
 echo '        "_comment": "Items to include in the context menu",' >>  $ConfigFile
-echo '        "AddToLocal": true' >> $ConfigFile
+echo '        "AddToLocal": true,' >> $ConfigFile
 echo '        "RemoveFromLocal": true' >> $ConfigFile
 echo '    }' >> $ConfigFile
 echo '}' >> $ConfigFile

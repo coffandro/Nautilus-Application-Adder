@@ -2,6 +2,7 @@ from gi.repository import Nautilus, GObject, Gtk, GdkPixbuf
 from typing import List
 from pathlib import Path
 from builtins import any as b_any
+import json
 import window
 import os
 
