@@ -80,7 +80,6 @@ class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
             return []
 
         file = files[0]
-        print(file.get_mime_type())
         if file.get_mime_type() in self.MimeTypes:
 
             if config_items["AddToLocal"]:

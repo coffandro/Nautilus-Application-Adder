@@ -62,10 +62,12 @@ class NAAWindow(Gtk.Window):
                 image.endswith(".png")
                 or image.endswith(".jpg")
                 or image.endswith(".jpeg")
+                or image.endswith(".ico")
+                or image.endswith(".svg")
             ):
                 images.append(image)
 
-        if b_any(word in x for x in images):
+        if b_any(word.lower() in x.lower() for x in images):
             Icon = self.CreateIcon(Path + "/" + images[0])
         elif self.file.get_mime_type() == None:
             Icon = self.CreateIcon(
@@ -168,7 +170,7 @@ class NAAWindow(Gtk.Window):
         return Icon
 
     def SelectImage(self, _widget):
-        dialog = Gtk.self.fileDialog()
+        dialog = Gtk.FileDialog()
 
         dialog.open(self, None, self.on_Icon_select)
 
@@ -179,8 +181,8 @@ class NAAWindow(Gtk.Window):
 
     def on_Icon_select(self, dialog, result):
         try:
-            self.file = dialog.open_finish(result)
-            self.IconButton.set_child(self.CreateIcon(self.file.get_path()))
+            File = dialog.open_finish(result)
+            self.IconButton.set_child(self.CreateIcon(File.get_path()))
         except Gtk.DialogError:
             # user cancelled or backend error
             pass
