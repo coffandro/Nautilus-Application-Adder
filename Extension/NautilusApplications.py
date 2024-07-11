@@ -60,13 +60,14 @@ class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
         status = False
 
         for i in os.listdir(f"{home}/.local/share/applications"):
-            f = open(
-                f"{home}/.local/share/applications/{i}", "r"
-            )
-            if f"# NAA={file.get_location().get_path()}" in f.readline().strip('\n'):
-                status = f"{home}/.local/share/applications/{i}"
-
-            f.close()
+            if not os.isdir(f"{home}/.local/share/applications/{i}"):
+                f = open(
+                    f"{home}/.local/share/applications/{i}", "r"
+                )
+                if f"# NAA={file.get_location().get_path()}" in f.readline().strip('\n'):
+                    status = f"{home}/.local/share/applications/{i}"
+    
+                f.close()
         return status
 
     def get_file_items(
