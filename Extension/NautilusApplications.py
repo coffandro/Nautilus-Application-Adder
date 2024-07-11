@@ -60,7 +60,7 @@ class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
         status = False
 
         for i in os.listdir(f"{home}/.local/share/applications"):
-            if not os.isdir(f"{home}/.local/share/applications/{i}"):
+            if not os.path.isdir(f"{home}/.local/share/applications/{i}"):
                 f = open(
                     f"{home}/.local/share/applications/{i}", "r"
                 )
