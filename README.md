@@ -11,10 +11,11 @@ run these commands with nautilus closed
 git clone https://github.com/coffandro/Nautilus-Application-Adder.git
 cd Nautilus-Application-Adder
 ./install.sh -i
+nautilus -q
 ```
 or as a self cleaning one liner:
 ```Bash
-git clone https://github.com/coffandro/Nautilus-Application-Adder.git && cd Nautilus-Application-Adder && ./install.sh -i && cd .. && yes "yes" | rm -rI Nautilus-Application-Adder
+git clone https://github.com/coffandro/Nautilus-Application-Adder.git && cd Nautilus-Application-Adder && ./install.sh -i && cd .. && yes "yes" | rm -rI Nautilus-Application-Adder && nautilus -q
 ```
 
 ## To configure!
