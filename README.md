@@ -14,7 +14,7 @@ cd Nautilus-Application-Adder
 ```
 or as a self cleaning one liner:
 ```Bash
-git clone https://github.com/coffandro/Nautilus-Application-Adder.git && cd Nautilus-Application-Adder && ./install.sh -i && cd .. && rm -r Nautilus-Application-Adder
+git clone https://github.com/coffandro/Nautilus-Application-Adder.git && cd Nautilus-Application-Adder && ./install.sh -i && cd .. && yes "yes" | rm -rI Nautilus-Application-Adder
 ```
 
 ## To configure!
