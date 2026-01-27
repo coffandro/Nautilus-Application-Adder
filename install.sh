@@ -15,6 +15,7 @@ EOF
 
 install() {
 InstallDeps
+echo "Installing plugin"
 mkdir -p ~/.local/share/nautilus-python/extensions/NautilusApplications
 cp Extension/NautilusApplications.py ~/.local/share/nautilus-python/extensions/NautilusApplications
 cp Extension/window.py ~/.local/share/nautilus-python/extensions/NautilusApplications
@@ -34,11 +35,13 @@ echo '        "AddToLocal": true,' >> $ConfigFile
 echo '        "RemoveFromLocal": true' >> $ConfigFile
 echo '    }' >> $ConfigFile
 echo '}' >> $ConfigFile
+
+echo "Plugin installed!"
 }
 
 InstallDeps() {
 # Install python-nautilus
-echo "Installing python-nautilus..."
+echo "Installing python-nautilus if missing..."
 if type "pacman" > /dev/null 2>&1
 then
     # check if already install, else install
@@ -84,6 +87,7 @@ fi
 remove() {
 rm -r ~/.local/share/nautilus-python/extensions/NautilusApplications
 rm ~/.local/share/nautilus-python/extensions/NautliusApplications-runner.py
+echo "Removed!"
 }
 
 VALID_ARGS=$(getopt -o hir --long help,install,remove -- "$@")

@@ -31,7 +31,7 @@ class NAAWindow(Gtk.Window):
         NameLabel = Gtk.Label.new("Name: ")
         self.NameTextbox = Gtk.Entry.new()
         if self.file != None:
-            self.NameTextbox.set_text(self.file.get_name())
+            self.NameTextbox.set_text(self.file.get_name().split(".")[0])
 
         CmntLabel = Gtk.Label.new("Comment: ")
         self.CmntTextbox = Gtk.Entry.new()
@@ -67,7 +67,7 @@ class NAAWindow(Gtk.Window):
             ):
                 images.append(image)
 
-        if b_any(word.lower() in x.lower() for x in images):
+        if b_any((word.lower() in x.lower() or "icon" in x.lower()) for x in images):
             Icon = self.CreateIcon(Path + "/" + images[0])
         elif self.file.get_mime_type() == None:
             Icon = self.CreateIcon(
