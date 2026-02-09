@@ -61,13 +61,13 @@ class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
 
         for i in os.listdir(f"{home}/.local/share/applications"):
             if not os.path.isdir(f"{home}/.local/share/applications/{i}"):
-                f = open(
+                with open(
                     f"{home}/.local/share/applications/{i}", "r"
-                )
-                if f"# NAA={file.get_location().get_path()}" in f.readline().strip('\n'):
-                    status = f"{home}/.local/share/applications/{i}"
-    
-                f.close()
+                ) as f:
+                    content = f.read()
+                    if f"# NAA={file.get_location().get_path()}" in content:
+                        status = f"{home}/.local/share/applications/{i}"
+                        break
         return status
 
     def get_file_items(
@@ -92,7 +92,7 @@ class NautilusAddDesktopFile(GObject.Object, Nautilus.MenuProvider):
                 item.connect("activate", self.AddLocalApp, file)
                 active_items.append(item)
             if config_items["RemoveFromLocal"]:
-                if self.ApplicationExists(file)!=False:
+                if self.ApplicationExists(file):
                     item = Nautilus.MenuItem(
                         name="SimpleMenuExtension::AddLocalAppEntry",
                         label="Remove from apps",
