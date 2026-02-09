@@ -15,7 +15,9 @@ The GNOME extension automatically installs and manages the Nautilus extension fo
 ```Bash
 git clone https://github.com/coffandro/Nautilus-Application-Adder.git
 cd Nautilus-Application-Adder
-cp -r gnome-extension ~/.local/share/gnome-shell/extensions/nautilus-application-adder@coffandro.github.io
+mkdir -p ~/.local/share/gnome-shell/extensions/nautilus-application-adder@coffandro.github.io
+cp -r gnome-extension/* ~/.local/share/gnome-shell/extensions/nautilus-application-adder@coffandro.github.io/
+cp -r Extension ~/.local/share/gnome-shell/extensions/nautilus-application-adder@coffandro.github.io/
 ```
 
 Then restart GNOME Shell (press `Alt+F2`, type `r`, and press Enter on X11, or log out and log back in on Wayland).

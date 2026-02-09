@@ -85,7 +85,7 @@ export default class NautilusApplicationAdderExtension extends Extension {
     }
 
     _copyFile(filename, destDir) {
-        const srcPath = GLib.build_filenamev([this._extensionDir, 'nautilus-extension', filename]);
+        const srcPath = GLib.build_filenamev([this._extensionDir, 'Extension', filename]);
         const destPath = GLib.build_filenamev([destDir, filename]);
         
         const srcFile = Gio.File.new_for_path(srcPath);
