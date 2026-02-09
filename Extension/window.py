@@ -175,7 +175,7 @@ class NAAWindow(Gtk.Window):
         dialog.open(self, None, self.on_Icon_select)
 
     def SelectCMD(self, _widget):
-        dialog = Gtk.self.fileDialog()
+        dialog = Gtk.FileDialog()
 
         dialog.open(self, None, self.on_CMD_select)
 
@@ -220,9 +220,7 @@ class NAAWindow(Gtk.Window):
             print("python3 missing in path!")
             Python3 = False
 
-        if Python3 and Python:
-            return "python"
-        elif Python3:
+        if Python3:
             return "python3"
         elif Python:
             return "python"
@@ -259,7 +257,7 @@ class NAAWindow(Gtk.Window):
             import webbrowser
 
             webbrowser.open("https://wiki.winehq.org/Download")
-            self.dialog.choose(self, None, self.CloseDialog)
+            self.dialog.choose(self, None, self.CloseWineDialog)
 
     def ClosePythonDialog(self, source_obj, async_res):
         result = source_obj.choose_finish(async_res)
@@ -269,4 +267,4 @@ class NAAWindow(Gtk.Window):
             import webbrowser
 
             webbrowser.open("https://www.python.org/downloads/")
-            self.dialog.choose(self, None, self.CloseDialog)
+            self.dialog.choose(self, None, self.ClosePythonDialog)
