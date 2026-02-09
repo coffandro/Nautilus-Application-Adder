@@ -1,0 +1,8 @@
+{
+    "name": "Nautilus Application Adder",
+    "description": "Automatically manages the Nautilus Application Adder python extension. Adds right-click context menu entries to add/remove executables from your applications list.",
+    "uuid": "nautilus-application-adder@coffandro.github.io",
+    "shell-version": ["45", "46", "47"],
+    "version": 1,
+    "url": "https://github.com/coffandro/Nautilus-Application-Adder"
+}
